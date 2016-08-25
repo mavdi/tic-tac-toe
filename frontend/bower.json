@@ -1,0 +1,7 @@
+{
+  "name": "tic-tac-toe-frontend",
+  "dependencies": {
+    "angular": "1.5.8",
+    "bootstrap": "3.3.7"
+  }
+}

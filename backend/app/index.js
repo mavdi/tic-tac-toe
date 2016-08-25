@@ -8,6 +8,7 @@ var socketIo = require('socket.io');
 
 var app = express();
 app.use(bodyParser.json());
+app.use(express.static(__dirname + '/../../frontend/app'));
 
 var server = http.Server(app);
 var io = socketIo(server);
