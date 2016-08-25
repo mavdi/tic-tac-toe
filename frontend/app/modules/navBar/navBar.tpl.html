@@ -1,0 +1,12 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#/">Tic Tac Toe</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li data-ng-class="{'active': 'play' === navBar.currentState}">
+                <a ng-click="navBar.select('play')">Play</a>
+            </li>
+        </ul>
+    </div>
+</nav>
