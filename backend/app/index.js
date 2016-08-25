@@ -21,9 +21,6 @@ app.get('/', function (req, res) {
     res.sendfile(__dirname + '/index.html');
 });
 
-io.on('connection', function (socket) {
-    socket.emit('news', {hello: 'world'});
-    socket.on('move:x', function (data) {
-        console.log(data);
-    });
-});
+require('./socket/hanlers')(io);
+
+
