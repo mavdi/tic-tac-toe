@@ -1,0 +1,9 @@
+{
+  "name": "tic-tac-toe",
+  "version": "1.0.0",
+  "author": "Mehdi Avdi",
+  "repository": {
+    "type": "git",
+    "url": "https://mavdi@github.com/mavdi/tic-tac-toe.git"
+  }
+}
