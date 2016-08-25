@@ -1,5 +1,5 @@
 (function () {
     'use strict';
 
-    angular.module('ticTacToe', ['ngRoute']);
+    angular.module('ticTacToe', ['ngRoute', 'ngResource']);
 })();

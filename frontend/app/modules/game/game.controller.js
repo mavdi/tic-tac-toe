@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    function playController() {
+    function gameController(GameDAO) {
         var socket = io.connect('http://localhost:3000');
 
         var ctrl = this;
@@ -21,5 +21,5 @@
         });
     }
 
-    angular.module('ticTacToe').controller('Play', [playController]);
+    angular.module('ticTacToe').controller('Game', ['GameDAO', gameController]);
 })();

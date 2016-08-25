@@ -3,7 +3,7 @@
 
     function NavBarController($location, $scope) {
         var ctrl = this;
-        var states = ['play'];
+        var states = ['game'];
 
         function init() {
             angular.forEach(states, function (state) {

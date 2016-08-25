@@ -5,8 +5,8 @@
         $routeProvider.when('/', {
             templateUrl: 'modules/home/home.tpl.html'
         });
-        $routeProvider.when('/play', {
-            templateUrl: 'modules/play/play.tpl.html', controller: 'Play as play'
+        $routeProvider.when('/game', {
+            templateUrl: 'modules/game/game.tpl.html', controller: 'Game as game'
         });
         $routeProvider.otherwise({redirectTo: '/'});
     }
