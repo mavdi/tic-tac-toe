@@ -3,10 +3,19 @@
 
     function NavBarController($location, $scope) {
         var ctrl = this;
+        var states = ['play'];
+
+        function init() {
+            angular.forEach(states, function (state) {
+                if (-1 !== $location.url().indexOf(state)) {
+                    ctrl.currentState = state;
+                }
+            });
+        }
 
         ctrl.select = function (option) {
             ctrl.currentState = option;
-            $location.path('/play');
+            $location.path('/' + option);
         };
 
         $scope.$on('$routeChangeSuccess', function (event, currentRoute) {
@@ -14,6 +23,8 @@
                 ctrl.currentState = '';
             }
         });
+
+        init();
     }
 
     function navBar() {
