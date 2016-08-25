@@ -1,16 +1,15 @@
 (function () {
     'use strict';
 
-
-    angular.module('ticTacToe').config(function ($routeProvider) {
-
+    function config($routeProvider) {
         $routeProvider.when('/', {
             templateUrl: 'modules/home/home.tpl.html'
         });
         $routeProvider.when('/play', {
-            templateUrl: 'modules/play/play.tpl.html'
+            templateUrl: 'modules/play/play.tpl.html', controller: 'Play as play'
         });
         $routeProvider.otherwise({redirectTo: '/'});
-    });
+    }
 
+    angular.module('ticTacToe').config(['$routeProvider', config]);
 })();

@@ -1,6 +1,7 @@
 {
   "globals": {
     "angular": true,
+    "io": true,
     "module": true,
     "require": true
   },
