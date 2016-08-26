@@ -17,10 +17,6 @@ server.listen(3000, function () {
     console.info('Http server listening on port', 3000);
 });
 
-app.get('/', function (req, res) {
-    res.sendfile(__dirname + '/index.html');
-});
-
 require('./socket/hanlers')(io);
 
 
