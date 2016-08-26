@@ -26,11 +26,15 @@ module.exports = function (io) {
         });
 
         socket.on('game:move:x', function (data) {
-            console.log(data);
+            roomManager.get(data.id).then(function (result) {
+                io.to('/#' + result.players.y).emit('game:moved', data);
+            });
         });
 
         socket.on('game:move:o', function (data) {
-            console.log(data);
+            roomManager.get(data.id).then(function (result) {
+                io.to('/#' + result.players.x).emit('game:moved', data);
+            });
         });
 
 

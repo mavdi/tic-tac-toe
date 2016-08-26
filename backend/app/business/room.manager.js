@@ -1,13 +1,15 @@
 'use strict';
 
-var Promise = require('bluebird');
-var uuid = require('node-uuid');
 var gamesStorage = require('../service/gamesStorage.service');
 
 function createAndJoin(id) {
     return gamesStorage.create(id).then(function () {
         return gamesStorage.join(id, id);
     });
+}
+
+function get(id) {
+    return gamesStorage.get(id);
 }
 
 function join(gameId, playerId) {
@@ -38,6 +40,7 @@ function leave(playerId) {
 
 module.exports = {
     createAndJoin: createAndJoin,
+    get: get,
     join: join,
     leave: leave
 };

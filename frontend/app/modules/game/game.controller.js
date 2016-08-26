@@ -2,11 +2,9 @@
     'use strict';
 
     function playController($location, $routeParams, $scope, $timeout) {
-        var socket = io.connect('http://localhost:3000');
-
-        var mark;
-
         var ctrl = this;
+        var yourMark, opponentMark;
+        var socket = io.connect('http://localhost:3000');
 
         function init() {
             ctrl.fields = [
@@ -19,7 +17,8 @@
                     ctrl.state = 'opponent-join';
                     $scope.$apply();
                     $timeout(function () {
-                        mark = 'o';
+                        yourMark = 'o';
+                        opponentMark = 'x';
                         ctrl.state = 'opponent-move';
                     }, 3000);
 
@@ -35,9 +34,17 @@
         }
 
         ctrl.click = function (x, y) {
-            ctrl.fields[y][x] = mark && mark.toUpperCase();
-            socket.emit('game:move:' + mark, {x: x, y: y});
-            socket.on('game:move:' + mark + ':response', function (data) {
+            if ('your-move' !== ctrl.state || ctrl.fields[y][x]) {
+                return;
+            }
+            ctrl.fields[y][x] = yourMark && yourMark.toUpperCase();
+            ctrl.state = 'opponent-move';
+            socket.emit('game:move:' + yourMark, {
+                id: $routeParams.id,
+                x: x,
+                y: y
+            });
+            socket.on('game:move:' + yourMark + ':response', function (data) {
                 console.log(data);
             });
         };
@@ -46,13 +53,20 @@
             ctrl.state = 'opponent-join';
             $scope.$apply();
             $timeout(function () {
-                mark = 'x';
+                yourMark = 'x';
+                opponentMark = 'o';
                 ctrl.state = 'your-move';
             }, 3000);
         });
 
         socket.on('room:opponent:leave', function () {
             ctrl.state = 'opponent-leave';
+            $scope.$apply();
+        });
+
+        socket.on('game:moved', function (data) {
+            ctrl.state = 'your-move';
+            ctrl.fields[data.y][data.x] = opponentMark && opponentMark.toUpperCase();
             $scope.$apply();
         });
 
