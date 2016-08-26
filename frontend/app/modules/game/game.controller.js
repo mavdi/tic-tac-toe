@@ -7,20 +7,18 @@
         var socket = io.connect('http://localhost:3000');
 
         function init() {
-            ctrl.fields = [
-                [], [], []
-            ];
+            resetFields();
 
             if ($routeParams.id) {
                 socket.emit('room:join', $routeParams.id);
                 socket.on('room:join:response', function () {
-                    ctrl.state = 'opponent-join';
+                    ctrl.state = 'game-start';
                     $scope.$apply();
                     $timeout(function () {
                         yourMark = 'o';
                         opponentMark = 'x';
                         ctrl.state = 'opponent-move';
-                    }, 3000);
+                    }, 2000);
 
                 });
             } else {
@@ -32,6 +30,14 @@
                 });
             }
         }
+
+        function resetFields() {
+            ctrl.fields = [
+                [], [], []
+            ];
+        }
+
+
 
         function checkWinner(x, y) {
             var i, win = true, mark = ctrl.fields[y][x];
@@ -70,7 +76,7 @@
             return win;
         }
 
-        ctrl.click = function (x, y) {
+        ctrl.move = function (x, y) {
             if ('your-move' !== ctrl.state || ctrl.fields[y][x]) {
                 return;
             }
@@ -84,19 +90,22 @@
                 x: x,
                 y: y
             });
-            socket.on('game:move:' + yourMark + ':response', function (data) {
-                console.log(data);
-            });
+        };
+
+        ctrl.restart = function () {
+            ctrl.state = 'opponent-move';
+            resetFields();
+            socket.emit('game:restart:' + yourMark, $routeParams.id);
         };
 
         socket.on('room:opponent:join', function () {
-            ctrl.state = 'opponent-join';
+            ctrl.state = 'game-start';
             $scope.$apply();
             $timeout(function () {
                 yourMark = 'x';
                 opponentMark = 'o';
                 ctrl.state = 'your-move';
-            }, 3000);
+            }, 2000);
         });
 
         socket.on('room:opponent:leave', function () {
@@ -110,6 +119,12 @@
             if (checkWinner(data.x, data.y)) {
                 ctrl.state = 'you-lose';
             }
+            $scope.$apply();
+        });
+
+        socket.on('game:restarted', function () {
+            ctrl.state = 'your-move';
+            resetFields();
             $scope.$apply();
         });
 

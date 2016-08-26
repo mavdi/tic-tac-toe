@@ -22,7 +22,7 @@ function get(gameId) {
 function getByPlayer(playerId) {
     var game;
     _.forEach(games, function (_game) {
-        if (playerId === _game.players.x || playerId === _game.players.y) {
+        if (playerId === _game.players.x || playerId === _game.players.o) {
             game = _game;
         }
     });
@@ -37,8 +37,8 @@ function join(gameId, playerId) {
     if (games[gameId]) {
         if (!games[gameId].players.x) {
             games[gameId].players.x = playerId;
-        } else if (!games[gameId].players.y) {
-            games[gameId].players.y = playerId;
+        } else if (!games[gameId].players.o) {
+            games[gameId].players.o = playerId;
         } else {
             return Promise.reject('GAME_SLOTS_BUSY');
         }
@@ -52,8 +52,8 @@ function leave(gameId, playerId) {
     if (games[gameId]) {
         if (games[gameId].players.x === playerId) {
             delete games[gameId].players.x;
-        } else if (games[gameId].players.y === playerId) {
-            delete games[gameId].players.y;
+        } else if (games[gameId].players.o === playerId) {
+            delete games[gameId].players.o;
         }
         return Promise.resolve();
     } else {

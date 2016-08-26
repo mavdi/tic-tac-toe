@@ -2,6 +2,12 @@
     padding-bottom: 32px;
 }
 
+.view.view-game .restart {
+    text-align: center;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
 .view.view-game .board-row {
     width: 396px;
     margin: 0 auto;

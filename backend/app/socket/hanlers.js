@@ -27,13 +27,25 @@ module.exports = function (io) {
 
         socket.on('game:move:x', function (data) {
             roomManager.get(data.id).then(function (result) {
-                io.to('/#' + result.players.y).emit('game:moved', data);
+                io.to('/#' + result.players.o).emit('game:moved', data);
             });
         });
 
         socket.on('game:move:o', function (data) {
             roomManager.get(data.id).then(function (result) {
                 io.to('/#' + result.players.x).emit('game:moved', data);
+            });
+        });
+
+        socket.on('game:restart:x', function (data) {
+            roomManager.get(data).then(function (result) {
+                io.to('/#' + result.players.o).emit('game:restarted');
+            });
+        });
+
+        socket.on('game:restart:o', function (data) {
+            roomManager.get(data).then(function (result) {
+                io.to('/#' + result.players.x).emit('game:restarted');
             });
         });
 

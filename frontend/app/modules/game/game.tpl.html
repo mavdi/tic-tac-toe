@@ -6,7 +6,7 @@
         <div ng-switch="game.state">
             <h3 ng-switch-when="waiting" class="text-center">Waiting for opponent...</h3>
 
-            <h3 ng-switch-when="opponent-join" class="text-center">The game is started!</h3>
+            <h3 ng-switch-when="game-start" class="text-center">The game is started!</h3>
 
             <h3 ng-switch-when="opponent-leave" class="text-center">Opponent is disconnected!</h3>
 
@@ -19,8 +19,14 @@
             <h3 ng-switch-when="you-lose" class="text-center">You Lose!!!</h3>
         </div>
 
+        <div class="restart">
+            <button ng-if="'you-win' === game.state || 'you-lose' === game.state" ng-click="game.restart()"
+                    type="button" class="btn btn-info btn-lg restart">Restart
+            </button>
+        </div>
+
         <div ng-repeat="y in [0, 1, 2]" class="board-row">
-            <button ng-repeat="x in [0, 1, 2]" ng-click="game.click(x, y)" type="button" class="btn btn-default field">
+            <button ng-repeat="x in [0, 1, 2]" ng-click="game.move(x, y)" type="button" class="btn btn-default field">
                 {{game.fields[y][x]}}
             </button>
         </div>
