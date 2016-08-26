@@ -3,7 +3,7 @@
 
     function NavBarController($location, $scope) {
         var ctrl = this;
-        var states = ['game'];
+        var states = ['multiplayer'];
 
         function init() {
             angular.forEach(states, function (state) {

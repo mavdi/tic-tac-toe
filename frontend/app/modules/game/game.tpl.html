@@ -1,9 +1,9 @@
 <div class="view view-game">
     <div class="container">
 
-        <h1 class="text-center">Game</h1>
+        <h1 class="text-center">Tic Tac Toe</h1>
 
-        <div ng-switch="game.state">
+        <div ng-switch="multiplayerGame.state">
             <h3 ng-switch-when="waiting" class="text-center">Waiting for opponent...</h3>
 
             <h3 ng-switch-when="game-start" class="text-center">The game is started!</h3>
@@ -22,14 +22,15 @@
         </div>
 
         <div class="restart">
-            <button ng-if="game.isRestartVisible()" ng-click="game.restart()"
+            <button ng-if="multiplayerGame.isRestartVisible()" ng-click="multiplayerGame.restart()"
                     type="button" class="btn btn-info btn-lg restart">Restart
             </button>
         </div>
 
         <div ng-repeat="y in [0, 1, 2]" class="board-row">
-            <button ng-repeat="x in [0, 1, 2]" ng-click="game.move(x, y)" type="button" class="btn btn-default field">
-                {{game.fields[y][x]}}
+            <button ng-repeat="x in [0, 1, 2]" ng-click="multiplayerGame.move(x, y)" type="button"
+                    class="btn btn-default field">
+                {{multiplayerGame.fields[y][x]}}
             </button>
         </div>
 

@@ -148,5 +148,5 @@
         init();
     }
 
-    angular.module('ticTacToe').controller('Game', ['$location', '$routeParams', '$scope', '$timeout', playController]);
+    angular.module('ticTacToe').controller('MultiplayerGame', ['$location', '$routeParams', '$scope', '$timeout', playController]);
 })();
