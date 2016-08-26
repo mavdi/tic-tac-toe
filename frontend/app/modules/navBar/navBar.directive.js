@@ -3,7 +3,7 @@
 
     function NavBarController($location, $scope) {
         var ctrl = this;
-        var states = ['multiplayer'];
+        var states = ['singleplayer', 'multiplayer'];
 
         function init() {
             angular.forEach(states, function (state) {
@@ -15,7 +15,7 @@
 
         ctrl.select = function (option) {
             ctrl.currentState = option;
-            $location.path('/' + option);
+            $location.path('/' + option).search({});
         };
 
         $scope.$on('$routeChangeSuccess', function (event, currentRoute) {
