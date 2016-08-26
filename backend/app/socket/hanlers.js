@@ -4,19 +4,26 @@ var roomManager = require('../business/room.manager');
 
 module.exports = function (io) {
     io.on('connection', function (socket) {
+        var id = socket.id.slice(2);
 
         socket.on('room:create', function () {
-            roomManager.create(socket.id).then(function () {
-                socket.emit('room:create:response', socket.id);
+            roomManager.createAndJoin(id).then(function (result) {
+                socket.emit('room:create:response', result);
             });
         });
 
-        socket.on('game:' + socket.id, function (data) {
+        socket.on('room:join', function (data) {
+            roomManager.join(data, id).then(function (result) {
+                socket.emit('room:join:response', result);
+            });
+        });
+
+        socket.on('game:' + id, function (data) {
             console.log(data);
         });
 
         socket.on('disconnect', function () {
-            roomManager.leave(socket.id);
+            roomManager.leave(id);
         });
 
 

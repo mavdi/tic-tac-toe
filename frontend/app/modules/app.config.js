@@ -8,6 +8,9 @@
         $routeProvider.when('/game', {
             templateUrl: 'modules/game/game.tpl.html', controller: 'Game as game'
         });
+        $routeProvider.when('/game/:gameId', {
+            templateUrl: 'modules/game/game.tpl.html', controller: 'Game as game'
+        });
         $routeProvider.otherwise({redirectTo: '/'});
     }
 

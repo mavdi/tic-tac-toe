@@ -4,22 +4,32 @@ var Promise = require('bluebird');
 var uuid = require('node-uuid');
 var gamesStorage = require('../service/gamesStorage.service');
 
-function create(id) {
+function createAndJoin(id) {
     return gamesStorage.create(id).then(function () {
-        return gamesStorage.join(id, id, 'x');
-
+        return gamesStorage.join(id, id);
+    }).then(function () {
+        return id;
     });
 }
 
-function leave(id) {
-    return gamesStorage.getByPlayer(id).then(function (game) {
-        gamesStorage.leave(game.id, id);
-    });
+function join(gameId, playerId) {
+    return gamesStorage.join(gameId, playerId);
+}
 
-    //return gamesStorage.remove(id);
+function leave(playerId) {
+    var game;
+    return gamesStorage.getByPlayer(playerId).then(function (_game) {
+        game = _game;
+        gamesStorage.leave(game.id, playerId);
+    }).then(function () {
+        if (!game.players.x && !game.players.y) {
+            gamesStorage.remove(game.id);
+        }
+    });
 }
 
 module.exports = {
-    create: create,
+    createAndJoin: createAndJoin,
+    join: join,
     leave: leave
 };
