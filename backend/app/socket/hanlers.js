@@ -19,14 +19,18 @@ module.exports = function (io) {
             });
         });
 
-        socket.on('game:' + id, function (data) {
-            console.log(data);
-        });
-
         socket.on('disconnect', function () {
             roomManager.leave(id).then(function (result) {
                 io.to('/#' + result).emit('room:opponent:leave');
             });
+        });
+
+        socket.on('game:move:x', function (data) {
+            console.log(data);
+        });
+
+        socket.on('game:move:o', function (data) {
+            console.log(data);
         });
 
 

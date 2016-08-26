@@ -4,7 +4,7 @@
     function playController($location, $routeParams, $scope, $timeout) {
         var socket = io.connect('http://localhost:3000');
 
-        var id;
+        var mark;
 
         var ctrl = this;
 
@@ -19,6 +19,7 @@
                     ctrl.state = 'opponent-join';
                     $scope.$apply();
                     $timeout(function () {
+                        mark = 'o';
                         ctrl.state = 'opponent-move';
                     }, 3000);
 
@@ -34,14 +35,18 @@
         }
 
         ctrl.click = function (x, y) {
-            ctrl.fields[y][x] = 'X';
-            socket.emit('game:' + id, 'click');
+            ctrl.fields[y][x] = mark && mark.toUpperCase();
+            socket.emit('game:move:' + mark, {x: x, y: y});
+            socket.on('game:move:' + mark + ':response', function (data) {
+                console.log(data);
+            });
         };
 
         socket.on('room:opponent:join', function () {
             ctrl.state = 'opponent-join';
             $scope.$apply();
             $timeout(function () {
+                mark = 'x';
                 ctrl.state = 'your-move';
             }, 3000);
         });
