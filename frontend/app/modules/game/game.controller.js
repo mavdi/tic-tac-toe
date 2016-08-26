@@ -15,9 +15,14 @@
 
             if ($routeParams.id) {
                 socket.emit('room:join', $routeParams.id);
+                socket.on('room:join:response', function () {
+                    ctrl.state = 'The game is started!';
+                    $scope.$apply();
+                });
             } else {
                 socket.emit('room:create');
                 socket.on('room:create:response', function (data) {
+                    ctrl.state = 'Waiting for opponent...';
                     $location.search({id: data.id});
                     $scope.$apply();
                 });
@@ -30,12 +35,14 @@
         };
 
         socket.on('room:opponent:join', function () {
-            console.log('GAME STARTED !!!!!!!!!!');
-        })
+            ctrl.state = 'The game is started!';
+            $scope.$apply();
+        });
 
         socket.on('room:opponent:leave', function () {
-            console.log('he left');
-        })
+            ctrl.state = 'Opponent is disconnected!';
+            $scope.$apply();
+        });
 
         $scope.$on('$destroy', function () {
             socket.disconnect();

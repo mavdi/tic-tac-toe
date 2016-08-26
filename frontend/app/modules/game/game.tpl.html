@@ -3,6 +3,8 @@
 
         <h1 class="text-center">Game</h1>
 
+        <h3 class="text-center">{{game.state}}</h3>
+
         <div ng-repeat="y in [0, 1, 2]" class="board-row">
             <button ng-repeat="x in [0, 1, 2]" ng-click="game.click(x, y)" type="button" class="btn btn-default field">
                 {{game.fields[y][x]}}
