@@ -8,7 +8,7 @@ function create(gameId) {
     games[gameId] = {
         id: gameId, players: {}
     };
-    return Promise.resolve();
+    return Promise.resolve(games[gameId]);
 }
 
 function get(gameId) {
@@ -42,7 +42,7 @@ function join(gameId, playerId) {
         } else {
             return Promise.reject('GAME_SLOTS_BUSY');
         }
-        return Promise.resolve();
+        return Promise.resolve(games[gameId]);
     } else {
         return Promise.reject('GAME_NOT_EXIST');
     }

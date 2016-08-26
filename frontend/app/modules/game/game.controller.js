@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    function playController($routeParams) {
+    function playController($location, $routeParams, $scope) {
         var socket = io.connect('http://localhost:3000');
 
         var id;
@@ -13,12 +13,13 @@
                 [], [], []
             ];
 
-            if ($routeParams.gameId) {
-                socket.emit('room:join', $routeParams.gameId);
+            if ($routeParams.id) {
+                socket.emit('room:join', $routeParams.id);
             } else {
                 socket.emit('room:create');
                 socket.on('room:create:response', function (data) {
-                    id = data;
+                    $location.search({id: data.id});
+                    $scope.$apply();
                 });
             }
         }
@@ -28,8 +29,20 @@
             socket.emit('game:' + id, 'click');
         };
 
+        socket.on('room:opponent:join', function () {
+            console.log('GAME STARTED !!!!!!!!!!');
+        })
+
+        socket.on('room:opponent:leave', function () {
+            console.log('he left');
+        })
+
+        $scope.$on('$destroy', function () {
+            socket.disconnect();
+        });
+
         init();
     }
 
-    angular.module('ticTacToe').controller('Game', ['$routeParams', playController]);
+    angular.module('ticTacToe').controller('Game', ['$location', '$routeParams', '$scope', playController]);
 })();

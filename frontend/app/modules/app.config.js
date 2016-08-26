@@ -6,10 +6,7 @@
             templateUrl: 'modules/home/home.tpl.html'
         });
         $routeProvider.when('/game', {
-            templateUrl: 'modules/game/game.tpl.html', controller: 'Game as game'
-        });
-        $routeProvider.when('/game/:gameId', {
-            templateUrl: 'modules/game/game.tpl.html', controller: 'Game as game'
+            templateUrl: 'modules/game/game.tpl.html', controller: 'Game as game', reloadOnSearch: false
         });
         $routeProvider.otherwise({redirectTo: '/'});
     }

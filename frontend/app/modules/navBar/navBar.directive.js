@@ -19,7 +19,7 @@
         };
 
         $scope.$on('$routeChangeSuccess', function (event, currentRoute) {
-            if (-1 === currentRoute.$$route.originalPath.indexOf(ctrl.currentState)) {
+            if (!currentRoute.$$route || -1 === currentRoute.$$route.originalPath.indexOf(ctrl.currentState)) {
                 ctrl.currentState = '';
             }
         });

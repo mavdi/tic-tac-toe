@@ -14,7 +14,8 @@ module.exports = function (io) {
 
         socket.on('room:join', function (data) {
             roomManager.join(data, id).then(function (result) {
-                socket.emit('room:join:response', result);
+                socket.emit('room:join:response');
+                io.to('/#' + result).emit('room:opponent:join');
             });
         });
 
@@ -23,7 +24,9 @@ module.exports = function (io) {
         });
 
         socket.on('disconnect', function () {
-            roomManager.leave(id);
+            roomManager.leave(id).then(function (result) {
+                io.to('/#' + result).emit('room:opponent:leave');
+            });
         });
 
 
