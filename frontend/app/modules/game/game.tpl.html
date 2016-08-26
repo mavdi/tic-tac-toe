@@ -3,7 +3,17 @@
 
         <h1 class="text-center">Game</h1>
 
-        <h3 class="text-center">{{game.state}}</h3>
+        <div ng-switch="game.state">
+            <h3 ng-switch-when="waiting" class="text-center">Waiting for opponent...</h3>
+
+            <h3 ng-switch-when="opponent-join" class="text-center">The game is started!</h3>
+
+            <h3 ng-switch-when="opponent-leave" class="text-center">Opponent is disconnected!</h3>
+
+            <h3 ng-switch-when="your-move" class="text-center">Your move</h3>
+
+            <h3 ng-switch-when="opponent-move" class="text-center">Opponent move</h3>
+        </div>
 
         <div ng-repeat="y in [0, 1, 2]" class="board-row">
             <button ng-repeat="x in [0, 1, 2]" ng-click="game.click(x, y)" type="button" class="btn btn-default field">
