@@ -78,6 +78,18 @@
             return win;
         }
 
+        function checkDraw() {
+            var count = 0;
+            for (var j = 0; j < 3; j++) {
+                for (var i = 0; i < 3; i++) {
+                    if (ctrl.fields[j][i]) {
+                        count++;
+                    }
+                }
+            }
+            return 9 === count;
+        }
+
         ctrl.move = function (x, y) {
             if ('your-move' !== ctrl.state || ctrl.fields[y][x]) {
                 return;
@@ -86,6 +98,8 @@
             ctrl.state = 'opponent-move';
             if (checkWinner(x, y)) {
                 ctrl.state = 'you-win';
+            } else if (checkDraw()) {
+                ctrl.state = 'draw';
             }
             socket.emit('game:move:' + yourMark, {
                 id: $routeParams.id,
@@ -97,6 +111,10 @@
         ctrl.restart = function () {
             startGame(yourMark);
             socket.emit('game:restart:' + yourMark, $routeParams.id);
+        };
+
+        ctrl.isRestartVisible = function () {
+            return 'you-win' === ctrl.state || 'you-lose' === ctrl.state || 'draw' === ctrl.state;
         };
 
         socket.on('room:opponent:join', function (data) {
@@ -113,6 +131,8 @@
             ctrl.fields[data.y][data.x] = opponentMark && opponentMark.toUpperCase();
             if (checkWinner(data.x, data.y)) {
                 ctrl.state = 'you-lose';
+            } else if (checkDraw()) {
+                ctrl.state = 'draw';
             }
             $scope.$apply();
         });
