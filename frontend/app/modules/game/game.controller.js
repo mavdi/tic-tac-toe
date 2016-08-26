@@ -33,12 +33,52 @@
             }
         }
 
+        function checkWinner(x, y) {
+            var i, win = true, mark = ctrl.fields[y][x];
+            for (i = 0; i < 3; i++) {
+                if (mark !== ctrl.fields[i][x]) {
+                    win = false;
+                }
+            }
+            if (win) {
+                return true;
+            }
+            win = true;
+            for (i = 0; i < 3; i++) {
+                if (mark !== ctrl.fields[y][i]) {
+                    win = false;
+                }
+            }
+            if (win) {
+                return true;
+            }
+            win = true;
+            for (i = 0; i < 3; i++) {
+                if (mark !== ctrl.fields[2 - i][i]) {
+                    win = false;
+                }
+            }
+            if (win) {
+                return true;
+            }
+            win = true;
+            for (i = 0; i < 3; i++) {
+                if (mark !== ctrl.fields[i][2 - i]) {
+                    win = false;
+                }
+            }
+            return win;
+        }
+
         ctrl.click = function (x, y) {
             if ('your-move' !== ctrl.state || ctrl.fields[y][x]) {
                 return;
             }
             ctrl.fields[y][x] = yourMark && yourMark.toUpperCase();
             ctrl.state = 'opponent-move';
+            if (checkWinner(x, y)) {
+                ctrl.state = 'you-win';
+            }
             socket.emit('game:move:' + yourMark, {
                 id: $routeParams.id,
                 x: x,
@@ -67,6 +107,9 @@
         socket.on('game:moved', function (data) {
             ctrl.state = 'your-move';
             ctrl.fields[data.y][data.x] = opponentMark && opponentMark.toUpperCase();
+            if (checkWinner(data.x, data.y)) {
+                ctrl.state = 'you-lose';
+            }
             $scope.$apply();
         });
 
