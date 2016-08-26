@@ -15,10 +15,19 @@ function get(id) {
 function join(gameId, playerId) {
     return gamesStorage.join(gameId, playerId).then(function (game) {
         if (game.players.x && playerId !== game.players.x) {
-            return game.players.x;
+            return {
+                player1Id: game.players.x,
+                player1Mark: 'x',
+                player2Mark: 'o'
+            };
         } else if (game.players.o && playerId !== game.players.o) {
-            return game.players.o;
+            return {
+                player1Id: game.players.o,
+                player1Mark: 'o',
+                player2Mark: 'x'
+            };
         }
+
     });
 }
 

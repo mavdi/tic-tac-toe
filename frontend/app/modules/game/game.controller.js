@@ -7,19 +7,14 @@
         var socket = io.connect('http://localhost:3000');
 
         function init() {
-            resetFields();
+            ctrl.fields = [
+                [], [], []
+            ];
 
             if ($routeParams.id) {
                 socket.emit('room:join', $routeParams.id);
-                socket.on('room:join:response', function () {
-                    ctrl.state = 'game-start';
-                    $scope.$apply();
-                    $timeout(function () {
-                        yourMark = 'o';
-                        opponentMark = 'x';
-                        ctrl.state = 'opponent-move';
-                    }, 2000);
-
+                socket.on('room:join:response', function (data) {
+                    startGame(data, true);
                 });
             } else {
                 socket.emit('room:create');
@@ -31,13 +26,20 @@
             }
         }
 
-        function resetFields() {
+        function startGame(marker, scopeApply) {
             ctrl.fields = [
                 [], [], []
             ];
+            ctrl.state = 'game-start';
+            if (scopeApply) {
+                $scope.$apply();
+            }
+            $timeout(function () {
+                yourMark = marker;
+                opponentMark = 'x' === marker ? 'o' : 'x';
+                ctrl.state = 'x' === marker ? 'your-move' : 'opponent-move';
+            }, 2000);
         }
-
-
 
         function checkWinner(x, y) {
             var i, win = true, mark = ctrl.fields[y][x];
@@ -93,19 +95,12 @@
         };
 
         ctrl.restart = function () {
-            ctrl.state = 'opponent-move';
-            resetFields();
+            startGame(yourMark);
             socket.emit('game:restart:' + yourMark, $routeParams.id);
         };
 
-        socket.on('room:opponent:join', function () {
-            ctrl.state = 'game-start';
-            $scope.$apply();
-            $timeout(function () {
-                yourMark = 'x';
-                opponentMark = 'o';
-                ctrl.state = 'your-move';
-            }, 2000);
+        socket.on('room:opponent:join', function (data) {
+            startGame(data, true);
         });
 
         socket.on('room:opponent:leave', function () {
@@ -123,9 +118,7 @@
         });
 
         socket.on('game:restarted', function () {
-            ctrl.state = 'your-move';
-            resetFields();
-            $scope.$apply();
+            startGame(yourMark, true);
         });
 
         $scope.$on('$destroy', function () {
