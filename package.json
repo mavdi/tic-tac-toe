@@ -5,5 +5,12 @@
   "repository": {
     "type": "git",
     "url": "https://mavdi@github.com/mavdi/tic-tac-toe.git"
+  },
+  "dependencies": {
+    "bower": "1.7.9"
+  },
+  "scripts": {
+    "start": "node ./backend/app",
+    "postinstall": "cd backend && npm install && cd ../frontend && ../node_modules/.bin/bower install"
   }
 }

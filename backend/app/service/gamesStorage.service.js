@@ -66,10 +66,6 @@ function remove(gameId) {
     return Promise.resolve();
 }
 
-setInterval(function () {
-    console.log(games);
-}, 3000);
-
 module.exports = {
     create: create,
     get: get,
