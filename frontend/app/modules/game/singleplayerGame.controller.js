@@ -10,9 +10,7 @@
             ctrl.fields = [
                 [], [], []
             ];
-            ctrl.state = 'your-move';
         }
-
 
         function checkWinner(fields, x, y) {
             var i, win, mark = fields[y][x];
@@ -106,13 +104,32 @@
             }
 
             function findBestMove() {
-                var bestMove = {};
-                angular.forEach(winsMap.shift(), function (move) {
-                    if (!bestMove.wins || bestMove.wins < move.wins) {
-                        bestMove = move;
+                function findInMap() {
+                    var bestMove = {};
+                    angular.forEach(winsMap.shift(), function (move) {
+                        if (!bestMove.wins || bestMove.wins < move.wins) {
+                            bestMove = move;
+                        }
+                    });
+                    return bestMove.position;
+                }
+
+                function findAnyMove() {
+                    for (var j = 0; j < 3; j++) {
+                        for (var i = 0; i < 3; i++) {
+                            if (!ctrl.fields[j][i]) {
+                                return {x: i, y: j};
+                            }
+                        }
                     }
-                });
-                return bestMove.position;
+                }
+
+                if (winsMap.length) {
+
+                    return findInMap();
+                } else {
+                    return findAnyMove();
+                }
             }
 
             createWinsMap('o');
@@ -123,7 +140,7 @@
 
 
         ctrl.move = function (x, y) {
-            if ('your-move' !== ctrl.state || ctrl.fields[y][x]) {
+            if (ctrl.fields[y][x]) {
                 return;
             }
             ctrl.fields[y][x] = yourMark;
