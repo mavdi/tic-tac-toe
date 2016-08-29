@@ -140,7 +140,7 @@
 
 
         ctrl.move = function (x, y) {
-            if (ctrl.fields[y][x]) {
+            if (ctrl.fields[y][x] || ctrl.isRestartVisible()) {
                 return;
             }
             ctrl.fields[y][x] = yourMark;
@@ -158,6 +158,15 @@
             } else if (checkDraw(ctrl.fields)) {
                 ctrl.state = 'draw';
             }
+        };
+
+        ctrl.restart = function () {
+            ctrl.state = '';
+            init();
+        };
+
+        ctrl.isRestartVisible = function () {
+            return 'you-win' === ctrl.state || 'you-lose' === ctrl.state || 'draw' === ctrl.state;
         };
 
 
