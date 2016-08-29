@@ -1,0 +1,10 @@
+{
+  "name": "tic-tac-toe-frontend",
+  "dependencies": {
+    "angular": "1.5.8",
+    "angular-route": "1.5.8",
+    "bootstrap": "3.3.7",
+    "socket.io-client": "1.4.8",
+    "angular-resource": "1.5.8"
+  }
+}

@@ -1,0 +1,22 @@
+.view {
+    padding-bottom: 32px;
+}
+
+.view.view-game .restart {
+    text-align: center;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.view.view-game .board-row {
+    width: 396px;
+    margin: 0 auto;
+    background-color: #F3F3F3;
+}
+
+.view.view-game .field {
+    width: 108px;
+    height: 108px;
+    margin: 12px;
+    font-size: 24px;
+}
