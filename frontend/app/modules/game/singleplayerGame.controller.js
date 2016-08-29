@@ -3,7 +3,7 @@
 
     function playController($location, $routeParams, $scope, $timeout) {
         var ctrl = this;
-        var yourMark = 'o', opponentMark = 'o';
+        var yourMark = 'x', opponentMark = 'o';
 
 
         function init() {
@@ -72,18 +72,15 @@
             function createWinsMap(mark) {
                 var fieldsCopy = angular.copy(ctrl.fields);
                 var level = 0;
-                var count = 0;
                 var currentPath, currentPosition;
-                winsMap = [];
 
                 function findRecursively(mark) {
                     for (var j = 0; j < 3; j++) {
                         for (var i = 0; i < 3; i++) {
                             if (!fieldsCopy[j][i]) {
-                                count++;
                                 fieldsCopy[j][i] = mark;
                                 if (!level) {
-                                    currentPath = '' + i + j;
+                                    currentPath = 'x:' + i + ' y:' + j;
                                     currentPosition = {x: i, y: j};
                                 }
 
@@ -93,16 +90,13 @@
                                     winsMap[level][currentPath].wins = winsMap[level][currentPath].wins || 0;
                                     winsMap[level][currentPath].wins++;
                                     winsMap[level][currentPath].position = currentPosition;
-                                    delete fieldsCopy[j][i];
-
 
                                 } else {
                                     level++;
                                     findRecursively('x' === mark ? 'o' : 'x');
                                     level--;
-                                    delete fieldsCopy[j][i];
                                 }
-
+                                delete fieldsCopy[j][i];
                             }
                         }
                     }
@@ -111,27 +105,20 @@
                 findRecursively(mark);
             }
 
-
-            //function findBestMove() {
-            //
-            //    return winsMap.shift().sort(function (a, b)
-            //    {
-            //        if (a.wins < b.wins) {
-            //            return 1;
-            //        }
-            //        if (a.wins > b.wins) {
-            //            return -1;
-            //        }
-            //        return 0;
-            //    }).shift().position;
-            //}
+            function findBestMove() {
+                var bestMove = {};
+                angular.forEach(winsMap.shift(), function (move) {
+                    if (!bestMove.wins || bestMove.wins < move.wins) {
+                        bestMove = move;
+                    }
+                });
+                return bestMove.position;
+            }
 
             createWinsMap('o');
-            console.log(JSON.parse(JSON.stringify(winsMap)));
             createWinsMap('x');
-            console.log(JSON.parse(JSON.stringify(winsMap)));
             winsMap = winsMap.filter(Boolean);
-            //return findBestMove();
+            return findBestMove();
         }
 
 
@@ -140,10 +127,17 @@
                 return;
             }
             ctrl.fields[y][x] = yourMark;
-            console.log(botMove());
-            //ctrl.state = 'opponent-move';
             if (checkWinner(ctrl.fields, x, y)) {
                 ctrl.state = 'you-win';
+                return;
+            } else if (checkDraw(ctrl.fields)) {
+                ctrl.state = 'draw';
+                return;
+            }
+            var move = botMove();
+            ctrl.fields[move.y][move.x] = opponentMark;
+            if (checkWinner(ctrl.fields, move.x, move.y)) {
+                ctrl.state = 'you-lose';
             } else if (checkDraw(ctrl.fields)) {
                 ctrl.state = 'draw';
             }
