@@ -1,13 +1,11 @@
 'use strict';
 
 var express = require('express');
-var bodyParser = require('body-parser');
 var http = require('http');
 var socketIo = require('socket.io');
 
 
 var app = express();
-app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../../frontend/app'));
 
 var server = http.Server(app);
