@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    function playController($location, $routeParams, $scope, $timeout) {
+    function playController(GameState) {
         var ctrl = this;
         var yourMark = 'x', opponentMark = 'o';
 
@@ -11,58 +11,6 @@
                 [], [], []
             ];
         }
-
-        function checkWinner(fields, x, y) {
-            var i, win, mark = fields[y][x];
-            win = mark;
-            for (i = 0; i < 3; i++) {
-                if (mark !== fields[i][x]) {
-                    win = false;
-                }
-            }
-            if (win) {
-                return win;
-            }
-            win = mark;
-            for (i = 0; i < 3; i++) {
-                if (mark !== fields[y][i]) {
-                    win = false;
-                }
-            }
-            if (win) {
-                return win;
-            }
-            win = mark;
-            for (i = 0; i < 3; i++) {
-                if (mark !== fields[2 - i][i]) {
-                    win = false;
-                }
-            }
-            if (win) {
-                return win;
-            }
-            win = mark;
-            for (i = 0; i < 3; i++) {
-                if (mark !== fields[i][i]) {
-                    win = false;
-                }
-            }
-
-            return win;
-        }
-
-        function checkDraw(fields) {
-            var count = 0;
-            for (var j = 0; j < 3; j++) {
-                for (var i = 0; i < 3; i++) {
-                    if (fields[j][i]) {
-                        count++;
-                    }
-                }
-            }
-            return 9 === count;
-        }
-
 
         function botMove() {
             var winsMap = [];
@@ -82,7 +30,7 @@
                                     currentPosition = {x: i, y: j};
                                 }
 
-                                if (checkWinner(fieldsCopy, i, j)) {
+                                if (GameState.checkWinner(fieldsCopy, i, j)) {
                                     winsMap[level] = winsMap[level] || {};
                                     winsMap[level][currentPath] = winsMap[level][currentPath] || {};
                                     winsMap[level][currentPath].wins = winsMap[level][currentPath].wins || 0;
@@ -125,7 +73,6 @@
                 }
 
                 if (winsMap.length) {
-
                     return findInMap();
                 } else {
                     return findAnyMove();
@@ -144,18 +91,18 @@
                 return;
             }
             ctrl.fields[y][x] = yourMark;
-            if (checkWinner(ctrl.fields, x, y)) {
+            if (GameState.checkWinner(ctrl.fields, x, y)) {
                 ctrl.state = 'you-win';
                 return;
-            } else if (checkDraw(ctrl.fields)) {
+            } else if (GameState.checkDraw(ctrl.fields)) {
                 ctrl.state = 'draw';
                 return;
             }
             var move = botMove();
             ctrl.fields[move.y][move.x] = opponentMark;
-            if (checkWinner(ctrl.fields, move.x, move.y)) {
+            if (GameState.checkWinner(ctrl.fields, move.x, move.y)) {
                 ctrl.state = 'you-lose';
-            } else if (checkDraw(ctrl.fields)) {
+            } else if (GameState.checkDraw(ctrl.fields)) {
                 ctrl.state = 'draw';
             }
         };
@@ -173,5 +120,5 @@
         init();
     }
 
-    angular.module('ticTacToe').controller('SingleplayerGame', ['$location', '$routeParams', '$scope', '$timeout', playController]);
+    angular.module('ticTacToe').controller('SingleplayerGame', ['GameState', playController]);
 })();
