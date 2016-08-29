@@ -42,7 +42,7 @@
         }
 
         function checkWinner(x, y) {
-            var i, win = true, mark = ctrl.fields[y][x];
+            var i, win = mark, mark = ctrl.fields[y][x];
             for (i = 0; i < 3; i++) {
                 if (mark !== ctrl.fields[i][x]) {
                     win = false;
@@ -51,7 +51,7 @@
             if (win) {
                 return true;
             }
-            win = true;
+            win = mark;
             for (i = 0; i < 3; i++) {
                 if (mark !== ctrl.fields[y][i]) {
                     win = false;
@@ -60,7 +60,7 @@
             if (win) {
                 return true;
             }
-            win = true;
+            win = mark;
             for (i = 0; i < 3; i++) {
                 if (mark !== ctrl.fields[2 - i][i]) {
                     win = false;
@@ -69,7 +69,7 @@
             if (win) {
                 return true;
             }
-            win = true;
+            win = mark;
             for (i = 0; i < 3; i++) {
                 if (mark !== ctrl.fields[i][2 - i]) {
                     win = false;
