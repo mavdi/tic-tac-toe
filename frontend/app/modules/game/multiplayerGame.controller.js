@@ -1,10 +1,10 @@
 (function () {
     'use strict';
 
-    function playController($location, $routeParams, $scope, $timeout, GameState) {
+    function playController($location, $routeParams, $scope, $timeout, GameState, SocketIoUrl) {
         var ctrl = this;
         var yourMark, opponentMark;
-        var socket = io.connect('http://localhost:3000');
+        var socket = io.connect(SocketIoUrl);
 
         function init() {
             ctrl.fields = [
@@ -99,5 +99,5 @@
         init();
     }
 
-    angular.module('ticTacToe').controller('MultiplayerGame', ['$location', '$routeParams', '$scope', '$timeout', 'GameState', playController]);
+    angular.module('ticTacToe').controller('MultiplayerGame', ['$location', '$routeParams', '$scope', '$timeout', 'GameState', 'SocketIoUrl', playController]);
 })();
